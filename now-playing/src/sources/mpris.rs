@@ -18,7 +18,9 @@ use async_trait::async_trait;
 use futures_util::StreamExt;
 use std::collections::HashMap;
 use std::sync::Arc;
+use std::time::Duration;
 use tokio::sync::{mpsc, Mutex};
+use tokio::time::{interval, MissedTickBehavior};
 use zbus::{
     fdo,
     names::BusName,
@@ -109,6 +111,9 @@ impl MprisSource {
                 emit(&tx, &last, state).await;
             }
 
+            let mut tick = interval(Duration::from_secs(1));
+            tick.set_missed_tick_behavior(MissedTickBehavior::Skip);
+
             loop {
                 tokio::select! {
                     Some(_) = name_owner_changed.next() => {
@@ -119,6 +124,14 @@ impl MprisSource {
                     Some(_) = props_changed.next() => {
                         if let Ok(state) = read_active(&conn, &preferred).await {
                             emit(&tx, &last, state).await;
+                        }
+                    }
+                    _ = tick.tick() => {
+                        let playing = matches!(last.lock().await.status, Status::Playing);
+                        if playing {
+                            if let Ok(state) = read_active(&conn, &preferred).await {
+                                emit(&tx, &last, state).await;
+                            }
                         }
                     }
                     else => break,
