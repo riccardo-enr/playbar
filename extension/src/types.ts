@@ -10,6 +10,7 @@ export interface NowPlaying {
   artist?: string;
   title?: string;
   album?: string;
+  art_url?: string;
   position_ms?: number;
   duration_ms?: number;
 }

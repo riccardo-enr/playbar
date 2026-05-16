@@ -22,6 +22,7 @@ export class StatusBar implements vscode.Disposable {
   private readonly prev?: vscode.StatusBarItem;
   private readonly toggle?: vscode.StatusBarItem;
   private readonly next?: vscode.StatusBarItem;
+  private lastTooltipKey: string = "";
 
   constructor(private readonly opts: StatusBarOptions) {
     const align = opts.alignment === "left"
@@ -64,7 +65,11 @@ export class StatusBar implements vscode.Disposable {
     }
 
     this.main.text = format(state, this.opts.template, this.opts.maxLength);
-    this.main.tooltip = buildTooltip(state);
+    const key = tooltipKey(state);
+    if (key !== this.lastTooltipKey) {
+      this.main.tooltip = buildTooltip(state);
+      this.lastTooltipKey = key;
+    }
     this.main.show();
 
     if (this.toggle) {
@@ -94,6 +99,10 @@ export class StatusBar implements vscode.Disposable {
 function buildTooltip(state: NowPlaying): vscode.MarkdownString {
   const md = new vscode.MarkdownString();
   md.isTrusted = false;
+  md.supportHtml = true;
+  if (state.art_url) {
+    md.appendMarkdown(`<img src="${state.art_url}" width="180" height="180" />\n\n`);
+  }
   if (state.title) {
     md.appendMarkdown(`**${escape(state.title)}**\n\n`);
   }
@@ -103,24 +112,26 @@ function buildTooltip(state: NowPlaying): vscode.MarkdownString {
   if (state.album) {
     md.appendMarkdown(`_${escape(state.album)}_\n\n`);
   }
-  if (state.duration_ms != null) {
-    md.appendMarkdown(`${formatTime(state.position_ms ?? 0)} / ${formatTime(state.duration_ms)}\n\n`);
-  }
   if (state.player) {
     md.appendMarkdown(`Player: \`${state.player}\` (${labelForStatus(state.status)})`);
   }
   return md;
 }
 
-function escape(s: string): string {
-  return s.replace(/[\\`*_{}[\]()#+\-.!|]/g, (c) => `\\${c}`);
+function tooltipKey(state: NowPlaying): string {
+  return [
+    state.title ?? "",
+    state.artist ?? "",
+    state.album ?? "",
+    state.art_url ?? "",
+    state.duration_ms ?? "",
+    state.player ?? "",
+    state.status,
+  ].join("");
 }
 
-function formatTime(ms: number): string {
-  const total = Math.floor(ms / 1000);
-  const m = Math.floor(total / 60);
-  const s = total % 60;
-  return `${m}:${s.toString().padStart(2, "0")}`;
+function escape(s: string): string {
+  return s.replace(/[\\`*_{}[\]()#+\-.!|]/g, (c) => `\\${c}`);
 }
 
 function labelForStatus(s: Status): string {

@@ -247,6 +247,7 @@ async fn read_player_state(conn: &Connection, bus: &str) -> anyhow::Result<NowPl
     let title = string_field(&metadata, "xesam:title");
     let album = string_field(&metadata, "xesam:album");
     let artist = string_array_field(&metadata, "xesam:artist").map(|v| v.join(", "));
+    let art_url = string_field(&metadata, "mpris:artUrl");
     let duration_us: Option<i64> = i64_field(&metadata, "mpris:length");
 
     Ok(NowPlaying {
@@ -255,6 +256,7 @@ async fn read_player_state(conn: &Connection, bus: &str) -> anyhow::Result<NowPl
         artist,
         title,
         album,
+        art_url,
         position_ms: Some((position_us.max(0) as u64) / 1000),
         duration_ms: duration_us.map(|d| (d.max(0) as u64) / 1000),
     })

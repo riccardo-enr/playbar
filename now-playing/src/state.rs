@@ -31,6 +31,8 @@ pub struct NowPlaying {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub album: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub art_url: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub position_ms: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub duration_ms: Option<u64>,
@@ -44,6 +46,7 @@ impl NowPlaying {
             artist: None,
             title: None,
             album: None,
+            art_url: None,
             position_ms: None,
             duration_ms: None,
         }
