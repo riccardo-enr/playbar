@@ -61,6 +61,16 @@
           "type": "string",
           "default": "",
           "description": "Path to the now-playing binary. Empty = use bundled binary."
+        },
+        "nowPlaying.hidePausedAfterSeconds": {
+          "type": "number",
+          "default": 0,
+          "description": "Hide the status bar after the player has been paused for this many seconds. 0 disables."
+        },
+        "nowPlaying.hideIdleAfterSeconds": {
+          "type": "number",
+          "default": 0,
+          "description": "Hide the status bar after the player has been stopped (or otherwise idle) for this many seconds. 0 disables."
         }
       }
     }

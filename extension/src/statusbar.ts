@@ -15,6 +15,8 @@ export interface StatusBarOptions {
   template: string;
   maxLength: number;
   showControls: boolean;
+  hidePausedAfterSeconds: number;
+  hideIdleAfterSeconds: number;
 }
 
 export class StatusBar implements vscode.Disposable {
@@ -23,6 +25,9 @@ export class StatusBar implements vscode.Disposable {
   private readonly toggle?: vscode.StatusBarItem;
   private readonly next?: vscode.StatusBarItem;
   private lastTooltipKey: string = "";
+  private hideTimer: NodeJS.Timeout | undefined;
+  private lastStatus: Status | undefined;
+  private autoHidden = false;
 
   constructor(private readonly opts: StatusBarOptions) {
     const align = opts.alignment === "left"
@@ -61,6 +66,17 @@ export class StatusBar implements vscode.Disposable {
   render(state: NowPlaying) {
     if (state.status === "none" || (!state.title && !state.artist)) {
       this.hide();
+      this.lastStatus = state.status;
+      this.autoHidden = false;
+      return;
+    }
+
+    const statusChanged = state.status !== this.lastStatus;
+
+    // Once the auto-hide timer has fired, stay hidden until playback status
+    // actually changes. Otherwise periodic metadata frames from the player
+    // would re-show the bar on every D-Bus PropertiesChanged.
+    if (this.autoHidden && !statusChanged) {
       return;
     }
 
@@ -79,9 +95,26 @@ export class StatusBar implements vscode.Disposable {
     }
     this.prev?.show();
     this.next?.show();
+
+    if (statusChanged) {
+      this.autoHidden = false;
+      switch (state.status) {
+        case "playing":
+          this.clearHideTimer();
+          break;
+        case "paused":
+          this.scheduleHide(this.opts.hidePausedAfterSeconds);
+          break;
+        case "stopped":
+          this.scheduleHide(this.opts.hideIdleAfterSeconds);
+          break;
+      }
+      this.lastStatus = state.status;
+    }
   }
 
   hide() {
+    this.clearHideTimer();
     this.main.hide();
     this.prev?.hide();
     this.toggle?.hide();
@@ -89,10 +122,29 @@ export class StatusBar implements vscode.Disposable {
   }
 
   dispose() {
+    this.clearHideTimer();
     this.main.dispose();
     this.prev?.dispose();
     this.toggle?.dispose();
     this.next?.dispose();
+  }
+
+  private clearHideTimer() {
+    if (this.hideTimer) {
+      clearTimeout(this.hideTimer);
+      this.hideTimer = undefined;
+    }
+  }
+
+  private scheduleHide(seconds: number) {
+    this.clearHideTimer();
+    if (seconds <= 0) {
+      return;
+    }
+    this.hideTimer = setTimeout(() => {
+      this.autoHidden = true;
+      this.hide();
+    }, seconds * 1000);
   }
 }
 

@@ -66,6 +66,8 @@ function boot(ctx: vscode.ExtensionContext) {
     template: cfg.get<string>("format", "{icon} {artist} - {title}"),
     maxLength: cfg.get<number>("maxLength", 50),
     showControls: cfg.get<boolean>("showControls", true),
+    hidePausedAfterSeconds: cfg.get<number>("hidePausedAfterSeconds", 0),
+    hideIdleAfterSeconds: cfg.get<number>("hideIdleAfterSeconds", 0),
   };
   const statusBar = new StatusBar(opts);
   const binary = resolveBinaryPath(ctx.extensionPath, cfg.get<string>("sidecarPath", ""));

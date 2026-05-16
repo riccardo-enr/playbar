@@ -71,6 +71,15 @@ Missing fields render as empty and adjacent ` - ` separators collapse, so a
 format like `"{icon} {artist} - {title} [{position}/{length}]"` degrades
 gracefully when a player does not expose position or album metadata.
 
+### Auto-hide
+
+Two grace-period settings keep the status bar tidy when nothing is actively
+playing. Both default to `0` (disabled).
+
+- `nowPlaying.hidePausedAfterSeconds` — hide once the player has been paused
+  for that many seconds. The bar reappears as soon as playback resumes.
+- `nowPlaying.hideIdleAfterSeconds` — same idea when the player is stopped.
+
 ## Standalone use
 
 The sidecar is useful by itself:
