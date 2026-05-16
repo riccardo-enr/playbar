@@ -28,8 +28,8 @@
       "properties": {
         "nowPlaying.format": {
           "type": "string",
-          "default": "$(unmute) {artist} - {title}",
-          "description": "Status bar format. Placeholders: {artist}, {title}, {album}, {player}, {status}."
+          "default": "{icon} {artist} - {title}",
+          "description": "Status bar format. Placeholders: {icon}, {artist}, {title}, {album}, {position}, {length}, {player}, {status}. {icon} reflects playback status; {position} and {length} render as mm:ss (h:mm:ss when over one hour)."
         },
         "nowPlaying.maxLength": {
           "type": "number",

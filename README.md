@@ -52,6 +52,25 @@ To run the extension, open `extension/` in VSCode and press F5 (Extension
 Development Host). Override `nowPlaying.sidecarPath` in settings if you'd
 rather point at a checked-out debug binary.
 
+## Configuration
+
+`nowPlaying.format` accepts a template string with the following placeholders:
+
+| Token        | Renders                                                          |
+|--------------|------------------------------------------------------------------|
+| `{icon}`     | Codicon driven by playback status (play/pause/stop, empty if none) |
+| `{artist}`   | Track artist                                                     |
+| `{title}`    | Track title                                                      |
+| `{album}`    | Album name                                                       |
+| `{position}` | Current playback position, `mm:ss` (or `h:mm:ss` over one hour)  |
+| `{length}`   | Track duration, same format as `{position}`                      |
+| `{player}`   | MPRIS player identifier (e.g. `spotify`)                         |
+| `{status}`   | Raw status string (`playing` / `paused` / `stopped` / `none`)    |
+
+Missing fields render as empty and adjacent ` - ` separators collapse, so a
+format like `"{icon} {artist} - {title} [{position}/{length}]"` degrades
+gracefully when a player does not expose position or album metadata.
+
 ## Standalone use
 
 The sidecar is useful by itself:

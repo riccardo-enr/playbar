@@ -63,7 +63,7 @@ function boot(ctx: vscode.ExtensionContext) {
   const opts: StatusBarOptions = {
     alignment: cfg.get<"left" | "right">("alignment", "right"),
     priority: cfg.get<number>("priority", 100),
-    template: cfg.get<string>("format", "$(unmute) {artist} - {title}"),
+    template: cfg.get<string>("format", "{icon} {artist} - {title}"),
     maxLength: cfg.get<number>("maxLength", 50),
     showControls: cfg.get<boolean>("showControls", true),
   };
