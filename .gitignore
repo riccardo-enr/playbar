@@ -1,0 +1,15 @@
+# Rust
+now-playing/target/
+
+# Node / TypeScript
+extension/node_modules/
+extension/out/
+
+# Build artifacts
+extension/bin/
+extension/*.vsix
+
+# Editor
+.vscode/
+.idea/
+*.swp

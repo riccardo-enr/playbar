@@ -1,0 +1,75 @@
+{
+  "name": "now-playing",
+  "displayName": "Now Playing",
+  "description": "Show the currently playing media (MPRIS) in the VSCode status bar.",
+  "version": "0.1.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/riccardo-enr/vscode-now-playing.git"
+  },
+  "publisher": "riccardo",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": ["Other"],
+  "activationEvents": ["onStartupFinished"],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      { "command": "nowPlaying.playPause", "title": "Now Playing: Play/Pause" },
+      { "command": "nowPlaying.next", "title": "Now Playing: Next" },
+      { "command": "nowPlaying.prev", "title": "Now Playing: Previous" },
+      { "command": "nowPlaying.refresh", "title": "Now Playing: Refresh" }
+    ],
+    "configuration": {
+      "title": "Now Playing",
+      "properties": {
+        "nowPlaying.format": {
+          "type": "string",
+          "default": "$(unmute) {artist} - {title}",
+          "description": "Status bar format. Placeholders: {artist}, {title}, {album}, {player}, {status}."
+        },
+        "nowPlaying.maxLength": {
+          "type": "number",
+          "default": 50,
+          "description": "Max characters before truncation with ellipsis."
+        },
+        "nowPlaying.alignment": {
+          "type": "string",
+          "enum": ["left", "right"],
+          "default": "right",
+          "description": "Status bar alignment."
+        },
+        "nowPlaying.priority": {
+          "type": "number",
+          "default": 100,
+          "description": "Status bar priority (higher = further from edges)."
+        },
+        "nowPlaying.showControls": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show separate prev/play-pause/next status bar buttons."
+        },
+        "nowPlaying.preferredPlayer": {
+          "type": "string",
+          "default": "",
+          "description": "Preferred MPRIS player suffix (e.g. 'spotify'). Empty = first available."
+        },
+        "nowPlaying.sidecarPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to the now-playing binary. Empty = use bundled binary."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p .",
+    "watch": "tsc -w -p ."
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.4.0"
+  }
+}
