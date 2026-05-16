@@ -1,20 +1,44 @@
 /*
  * Format-string interpolation and truncation.
  *
- * Placeholders: {icon}, {artist}, {title}, {album}, {position}, {length},
- * {player}, {status}. Missing fields render as empty strings; the result is
- * then collapsed to single spaces and trimmed so a missing artist doesn't
- * leave a dangling " - " in the status bar.
+ * Placeholders: {icon}, {playerIcon}, {artist}, {title}, {album},
+ * {position}, {length}, {player}, {status}. Missing fields render as empty
+ * strings; the result is then collapsed to single spaces and trimmed so a
+ * missing artist doesn't leave a dangling " - " in the status bar.
  *
- * {icon} resolves to a codicon driven by playback status. {position} and
- * {length} render `mm:ss` for tracks under one hour and `h:mm:ss` otherwise.
+ * {icon} resolves to a codicon driven by playback status. {playerIcon}
+ * resolves via a merged map (built-in defaults + user overrides) keyed on
+ * the MPRIS bus suffix. {position} and {length} render `mm:ss` for tracks
+ * under one hour and `h:mm:ss` otherwise.
  */
 
 import { NowPlaying, Status } from "./types";
 
-export function format(state: NowPlaying, template: string, maxLength: number): string {
+const DEFAULT_PLAYER_ICONS: Record<string, string> = {
+  spotify: "$(music)",
+  firefox: "$(globe)",
+  vlc: "$(device-camera-video)",
+  mpv: "$(play-circle)",
+  chromium: "$(globe)",
+  "google-chrome": "$(globe)",
+  brave: "$(globe)",
+  audacious: "$(music)",
+  rhythmbox: "$(music)",
+};
+
+export interface FormatExtras {
+  playerIcons?: Record<string, string>;
+}
+
+export function format(
+  state: NowPlaying,
+  template: string,
+  maxLength: number,
+  extras: FormatExtras = {},
+): string {
   const fields: Record<string, string> = {
     icon: iconFor(state.status),
+    playerIcon: playerIconFor(state.player, extras.playerIcons ?? {}),
     artist: state.artist ?? "",
     title: state.title ?? "",
     album: state.album ?? "",
@@ -31,6 +55,21 @@ export function format(state: NowPlaying, template: string, maxLength: number): 
     out = out.slice(0, Math.max(1, maxLength - 1)) + "…";
   }
   return out;
+}
+
+function playerIconFor(
+  player: string | undefined,
+  overrides: Record<string, string>,
+): string {
+  if (!player) {
+    return "";
+  }
+  const merged = { ...DEFAULT_PLAYER_ICONS, ...overrides };
+  if (merged[player]) {
+    return merged[player];
+  }
+  const base = player.split(".", 1)[0];
+  return merged[base] ?? "";
 }
 
 function iconFor(status: Status): string {

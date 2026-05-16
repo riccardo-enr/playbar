@@ -68,6 +68,7 @@ function boot(ctx: vscode.ExtensionContext) {
     showControls: cfg.get<boolean>("showControls", true),
     hidePausedAfterSeconds: cfg.get<number>("hidePausedAfterSeconds", 0),
     hideIdleAfterSeconds: cfg.get<number>("hideIdleAfterSeconds", 0),
+    playerIcons: cfg.get<Record<string, string>>("playerIcons", {}),
   };
   const statusBar = new StatusBar(opts);
   const binary = resolveBinaryPath(ctx.extensionPath, cfg.get<string>("sidecarPath", ""));

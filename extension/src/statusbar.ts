@@ -17,6 +17,7 @@ export interface StatusBarOptions {
   showControls: boolean;
   hidePausedAfterSeconds: number;
   hideIdleAfterSeconds: number;
+  playerIcons: Record<string, string>;
 }
 
 export class StatusBar implements vscode.Disposable {
@@ -80,7 +81,9 @@ export class StatusBar implements vscode.Disposable {
       return;
     }
 
-    this.main.text = format(state, this.opts.template, this.opts.maxLength);
+    this.main.text = format(state, this.opts.template, this.opts.maxLength, {
+      playerIcons: this.opts.playerIcons,
+    });
     const key = tooltipKey(state);
     if (key !== this.lastTooltipKey) {
       this.main.tooltip = buildTooltip(state);

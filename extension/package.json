@@ -71,6 +71,12 @@
           "type": "number",
           "default": 0,
           "description": "Hide the status bar after the player has been stopped (or otherwise idle) for this many seconds. 0 disables."
+        },
+        "nowPlaying.playerIcons": {
+          "type": "object",
+          "default": {},
+          "additionalProperties": { "type": "string" },
+          "description": "Override or extend the built-in player-to-icon map used by the {playerIcon} format token. Keys are MPRIS bus suffixes (e.g. 'spotify', 'firefox'); values are codicon strings like '$(music)'. Merged over the built-in defaults."
         }
       }
     }

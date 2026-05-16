@@ -59,6 +59,7 @@ rather point at a checked-out debug binary.
 | Token        | Renders                                                          |
 |--------------|------------------------------------------------------------------|
 | `{icon}`     | Codicon driven by playback status (play/pause/stop, empty if none) |
+| `{playerIcon}` | Codicon for the active MPRIS player (see "Player icons" below) |
 | `{artist}`   | Track artist                                                     |
 | `{title}`    | Track title                                                      |
 | `{album}`    | Album name                                                       |
@@ -70,6 +71,38 @@ rather point at a checked-out debug binary.
 Missing fields render as empty and adjacent ` - ` separators collapse, so a
 format like `"{icon} {artist} - {title} [{position}/{length}]"` degrades
 gracefully when a player does not expose position or album metadata.
+
+### Player icons
+
+`{playerIcon}` resolves via a merged map (built-in defaults + the user
+setting `nowPlaying.playerIcons`). Keys are the MPRIS bus suffix
+(`state.player`); values are codicon strings.
+
+Built-in defaults:
+
+| Player      | Codicon                |
+|-------------|------------------------|
+| `spotify`   | `$(music)`             |
+| `firefox`   | `$(globe)`             |
+| `vlc`       | `$(device-camera-video)` |
+| `mpv`       | `$(play-circle)`       |
+| `chromium`  | `$(globe)`             |
+| `google-chrome` | `$(globe)`         |
+| `brave`     | `$(globe)`             |
+| `audacious` | `$(music)`             |
+| `rhythmbox` | `$(music)`             |
+
+Some players (Firefox, Chromium) expose suffixes like
+`firefox.instance_1_84`. Lookup falls back to the prefix before the first
+dot, so `firefox.*` resolves via the `firefox` entry. To override or add
+entries:
+
+```json
+"nowPlaying.playerIcons": {
+  "spotify": "$(megaphone)",
+  "amberol": "$(music)"
+}
+```
 
 ### Auto-hide
 
