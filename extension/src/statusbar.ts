@@ -28,29 +28,28 @@ export class StatusBar implements vscode.Disposable {
       ? vscode.StatusBarAlignment.Left
       : vscode.StatusBarAlignment.Right;
 
-    // Lower priority sits closer to the editor edge; group them so the
-    // controls appear next to the main item in a stable order.
-    // Use micro-fractional offsets so no other extension's status bar
-    // item can wedge itself between our controls and the title. Order
-    // on a right-aligned bar (higher priority = further from the edge):
-    // [title][prev][toggle][next] reading left-to-right.
+    // On a right-aligned status bar, HIGHER priority sits closer to the
+    // right edge. To render [title][prev][toggle][next] left-to-right,
+    // title needs the lowest priority and next the highest.
+    // Micro-fractional offsets keep the group contiguous so no other
+    // extension can wedge an item between them.
     const p = opts.priority;
-    this.main = vscode.window.createStatusBarItem("nowPlaying.main", align, p + 3e-4);
+    this.main = vscode.window.createStatusBarItem("nowPlaying.main", align, p);
     this.main.name = "Now Playing";
     this.main.command = "nowPlaying.playPause";
 
     if (opts.showControls) {
-      this.prev = vscode.window.createStatusBarItem("nowPlaying.prev", align, p + 2e-4);
+      this.prev = vscode.window.createStatusBarItem("nowPlaying.prev", align, p + 1e-4);
       this.prev.name = "Now Playing: Previous";
       this.prev.text = "$(chevron-left)";
       this.prev.tooltip = "Previous track";
       this.prev.command = "nowPlaying.prev";
 
-      this.toggle = vscode.window.createStatusBarItem("nowPlaying.toggle", align, p + 1e-4);
+      this.toggle = vscode.window.createStatusBarItem("nowPlaying.toggle", align, p + 2e-4);
       this.toggle.name = "Now Playing: Play/Pause";
       this.toggle.command = "nowPlaying.playPause";
 
-      this.next = vscode.window.createStatusBarItem("nowPlaying.next", align, p);
+      this.next = vscode.window.createStatusBarItem("nowPlaying.next", align, p + 3e-4);
       this.next.name = "Now Playing: Next";
       this.next.text = "$(chevron-right)";
       this.next.tooltip = "Next track";
