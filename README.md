@@ -10,6 +10,20 @@ Full documentation: <https://riccardo-enr.github.io/vscode-now-playing/>
 > **Note**: only tested on Linux (x86_64). MPRIS is a Linux/D-Bus protocol,
 > so macOS and Windows are not supported.
 
+## Install
+
+Grab the latest `now-playing-linux-x64-*.vsix` from the
+[Releases page](https://github.com/riccardo-enr/vscode-now-playing/releases)
+and install it:
+
+```bash
+code --install-extension now-playing-linux-x64-X.Y.Z.vsix
+```
+
+The sidecar binary is bundled inside the VSIX, so no separate build step is
+required. To point at a checked-out debug binary instead, set
+`nowPlaying.sidecarPath` in your VSCode settings.
+
 ## Layout
 
 ```
