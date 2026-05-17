@@ -1,6 +1,6 @@
 [package]
 name = "now-playing"
-version = "0.1.0"
+version = "0.1.6"
 edition = "2021"
 description = "Sidecar that reports the current MPRIS now-playing state as NDJSON"
 license = "MIT"
