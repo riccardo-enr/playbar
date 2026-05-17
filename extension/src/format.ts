@@ -129,7 +129,7 @@ function playerIconFor(
   return merged[base] ?? "";
 }
 
-function formatTime(ms: number | undefined): string {
+export function formatTime(ms: number | undefined): string {
   if (ms === undefined || ms < 0) {
     return "";
   }

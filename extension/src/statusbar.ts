@@ -7,7 +7,7 @@
 import * as vscode from "vscode";
 
 import { ArtCache } from "./artcache";
-import { format, FormatRule } from "./format";
+import { format, formatTime, FormatRule } from "./format";
 import { NowPlaying, Status } from "./types";
 
 export interface StatusBarOptions {
@@ -174,7 +174,14 @@ function buildTooltip(state: NowPlaying, artDataUrl: string | undefined): vscode
     md.appendMarkdown(`${escape(state.artist)}\n\n`);
   }
   if (state.album) {
-    md.appendMarkdown(`_${escape(state.album)}_\n\n`);
+    const yearSuffix = state.year ? ` (${state.year})` : "";
+    md.appendMarkdown(`_${escape(state.album)}${escape(yearSuffix)}_\n\n`);
+  } else if (state.year) {
+    md.appendMarkdown(`_(${state.year})_\n\n`);
+  }
+  const length = formatTime(state.duration_ms);
+  if (length) {
+    md.appendMarkdown(`Length: ${length}\n\n`);
   }
   if (state.player) {
     md.appendMarkdown(`Player: \`${state.player}\` (${labelForStatus(state.status)})`);
@@ -188,6 +195,7 @@ function tooltipKey(state: NowPlaying, artDataUrl: string | undefined): string {
     state.artist ?? "",
     state.album ?? "",
     state.art_url ?? "",
+    state.year ?? "",
     state.duration_ms ?? "",
     state.player ?? "",
     state.status,
