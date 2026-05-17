@@ -16,7 +16,6 @@ export interface NowPlaying {
 }
 
 export type Command =
-  | { cmd: "play_pause" }
   | { cmd: "play" }
   | { cmd: "pause" }
   | { cmd: "next" }

@@ -10,7 +10,7 @@ All settings live under the `nowPlaying.*` namespace in VSCode's settings.
 | `nowPlaying.maxLength`        | `50`                             | Max characters before truncation with ellipsis. |
 | `nowPlaying.alignment`        | `right`                          | Status bar alignment (`left` or `right`). |
 | `nowPlaying.priority`         | `100`                            | Status bar priority (higher = further from edges). |
-| `nowPlaying.showControls`     | `true`                           | Show separate prev/play-pause/next status bar buttons. |
+| `nowPlaying.showControls`     | `true`                           | Show separate prev/next status bar buttons. |
 | `nowPlaying.preferredPlayer`  | `""`                             | Preferred MPRIS player suffix (e.g. `spotify`). Empty = first available. |
 | `nowPlaying.sidecarPath`      | `""`                             | Path to the `now-playing` binary. Empty = use bundled binary. |
 

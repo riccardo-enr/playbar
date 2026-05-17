@@ -7,7 +7,6 @@ Palette (`Ctrl+Shift+P`).
 
 | Command                       | ID                       | Description                                  |
 |-------------------------------|--------------------------|----------------------------------------------|
-| Now Playing: Play/Pause       | `nowPlaying.playPause`   | Toggle playback on the active player.        |
 | Now Playing: Next             | `nowPlaying.next`        | Skip to the next track.                      |
 | Now Playing: Previous         | `nowPlaying.prev`        | Skip to the previous track.                  |
 | Now Playing: Focus Player     | `nowPlaying.raise`       | Raise the player window (MPRIS `Raise`).     |
@@ -19,7 +18,6 @@ Bind any command from `keybindings.json`:
 
 ```json
 [
-  { "key": "ctrl+alt+space", "command": "nowPlaying.playPause" },
   { "key": "ctrl+alt+right", "command": "nowPlaying.next" },
   { "key": "ctrl+alt+left",  "command": "nowPlaying.prev" }
 ]
@@ -28,6 +26,6 @@ Bind any command from `keybindings.json`:
 ## Status bar
 
 - Click the **track title** to run `nowPlaying.raise` and focus the player.
-- The prev/play-pause/next buttons appear when
+- The prev/next buttons appear when
   [`nowPlaying.showControls`](configuration.qmd) is enabled.
 - Hover the title to see album, player, status, and album art.

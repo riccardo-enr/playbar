@@ -17,7 +17,6 @@
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
-      { "command": "nowPlaying.playPause", "title": "Now Playing: Play/Pause" },
       { "command": "nowPlaying.next", "title": "Now Playing: Next" },
       { "command": "nowPlaying.prev", "title": "Now Playing: Previous" },
       { "command": "nowPlaying.raise", "title": "Now Playing: Focus Player" },
@@ -29,7 +28,7 @@
         "nowPlaying.format": {
           "type": "string",
           "default": "{playerIcon} {artist} - {title}",
-          "description": "Status bar format. Placeholders: {icon}, {playerIcon}, {artist}, {title}, {album}, {position}, {length}, {player}, {status}. {icon} reflects playback status; {playerIcon} resolves the player-specific icon; {position} and {length} render as mm:ss (h:mm:ss when over one hour)."
+          "description": "Status bar format. Placeholders: {playerIcon}, {artist}, {title}, {album}, {position}, {length}, {player}, {status}. {playerIcon} resolves the player-specific icon; {position} and {length} render as mm:ss (h:mm:ss when over one hour)."
         },
         "nowPlaying.maxLength": {
           "type": "number",

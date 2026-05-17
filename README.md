@@ -58,7 +58,6 @@ rather point at a checked-out debug binary.
 
 | Token        | Renders                                                          |
 |--------------|------------------------------------------------------------------|
-| `{icon}`     | Codicon driven by playback status (play/pause/stop, empty if none) |
 | `{playerIcon}` | Codicon for the active MPRIS player (see "Player icons" below) |
 | `{artist}`   | Track artist                                                     |
 | `{title}`    | Track title                                                      |
@@ -69,7 +68,7 @@ rather point at a checked-out debug binary.
 | `{status}`   | Raw status string (`playing` / `paused` / `stopped` / `none`)    |
 
 Missing fields render as empty and adjacent ` - ` separators collapse, so a
-format like `"{icon} {artist} - {title} [{position}/{length}]"` degrades
+format like `"{playerIcon} {artist} - {title} [{position}/{length}]"` degrades
 gracefully when a player does not expose position or album metadata.
 
 ### Player icons

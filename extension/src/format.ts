@@ -1,18 +1,17 @@
 /*
  * Format-string interpolation and truncation.
  *
- * Placeholders: {icon}, {playerIcon}, {artist}, {title}, {album},
+ * Placeholders: {playerIcon}, {artist}, {title}, {album},
  * {position}, {length}, {player}, {status}. Missing fields render as empty
  * strings; the result is then collapsed to single spaces and trimmed so a
  * missing artist doesn't leave a dangling " - " in the status bar.
  *
- * {icon} resolves to a codicon driven by playback status. {playerIcon}
- * resolves via a merged map (built-in defaults + user overrides) keyed on
- * the MPRIS bus suffix. {position} and {length} render `mm:ss` for tracks
- * under one hour and `h:mm:ss` otherwise.
+ * {playerIcon} resolves via a merged map (built-in defaults + user overrides)
+ * keyed on the MPRIS bus suffix. {position} and {length} render `mm:ss` for
+ * tracks under one hour and `h:mm:ss` otherwise.
  */
 
-import { NowPlaying, Status } from "./types";
+import { NowPlaying } from "./types";
 
 const DEFAULT_PLAYER_ICONS: Record<string, string> = {
   spotify: "$(music)",
@@ -37,7 +36,6 @@ export function format(
   extras: FormatExtras = {},
 ): string {
   const fields: Record<string, string> = {
-    icon: iconFor(state.status),
     playerIcon: playerIconFor(state.player, extras.playerIcons ?? {}),
     artist: state.artist ?? "",
     title: state.title ?? "",
@@ -70,15 +68,6 @@ function playerIconFor(
   }
   const base = player.split(".", 1)[0];
   return merged[base] ?? "";
-}
-
-function iconFor(status: Status): string {
-  switch (status) {
-    case "playing": return "$(play)";
-    case "paused": return "$(debug-pause)";
-    case "stopped": return "$(primitive-square)";
-    default: return "";
-  }
 }
 
 function formatTime(ms: number | undefined): string {

@@ -29,9 +29,6 @@ export function activate(ctx: vscode.ExtensionContext) {
   bring();
 
   ctx.subscriptions.push(
-    vscode.commands.registerCommand("nowPlaying.playPause", () =>
-      runtime?.sidecar.send({ cmd: "play_pause" }),
-    ),
     vscode.commands.registerCommand("nowPlaying.next", () =>
       runtime?.sidecar.send({ cmd: "next" }),
     ),
@@ -63,7 +60,7 @@ function boot(ctx: vscode.ExtensionContext) {
   const opts: StatusBarOptions = {
     alignment: cfg.get<"left" | "right">("alignment", "right"),
     priority: cfg.get<number>("priority", 100),
-    template: cfg.get<string>("format", "{icon} {artist} - {title}"),
+    template: cfg.get<string>("format", "{playerIcon} {artist} - {title}"),
     maxLength: cfg.get<number>("maxLength", 50),
     showControls: cfg.get<boolean>("showControls", true),
     hidePausedAfterSeconds: cfg.get<number>("hidePausedAfterSeconds", 0),
