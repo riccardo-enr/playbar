@@ -1,8 +1,8 @@
 <p align="left">
-  <img src="extension/assets/icon.png" alt="Now Playing icon" width="96" height="96">
+  <img src="extension/assets/icon.png" alt="PlayBar icon" width="96" height="96">
 </p>
 
-# Now Playing
+# PlayBar
 
 VSCode status-bar extension that mirrors `tmux-powerline`'s music segment.
 A small Rust sidecar (`now-playing/`) talks to MPRIS over D-Bus and emits

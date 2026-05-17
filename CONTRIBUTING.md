@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for your interest in improving Now Playing. This project has two
+Thanks for your interest in improving PlayBar. This project has two
 components — a Rust MPRIS sidecar (`now-playing/`) and a TypeScript VSCode
 extension (`extension/`) — and contributions to either are welcome.
 

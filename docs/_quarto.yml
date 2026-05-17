@@ -3,7 +3,7 @@ project:
   output-dir: _site
 
 website:
-  title: "Now Playing"
+  title: "PlayBar"
   description: "VSCode status-bar extension for MPRIS media players."
   favicon: assets/icon.png
   repo-url: https://github.com/riccardo-enr/vscode-now-playing

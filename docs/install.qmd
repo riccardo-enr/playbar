@@ -24,7 +24,7 @@ locally and running the Extension Development Host.
 1. Start any MPRIS-aware player (Spotify, mpv, VLC, Firefox, ...).
 2. Open VSCode. The status bar should show the current track.
 3. If nothing appears, open the Command Palette and run
-   `Now Playing: Refresh`, or check the Output panel for sidecar errors.
+   `PlayBar: Refresh`, or check the Output panel for sidecar errors.
 
 ## Troubleshooting
 

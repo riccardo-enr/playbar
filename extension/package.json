@@ -1,6 +1,6 @@
 {
   "name": "now-playing",
-  "displayName": "Now Playing",
+  "displayName": "PlayBar",
   "description": "Show the currently playing media (MPRIS) in the VSCode status bar.",
   "version": "0.2.0",
   "repository": {
@@ -18,13 +18,13 @@
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
-      { "command": "nowPlaying.next", "title": "Now Playing: Next" },
-      { "command": "nowPlaying.prev", "title": "Now Playing: Previous" },
-      { "command": "nowPlaying.raise", "title": "Now Playing: Focus Player" },
-      { "command": "nowPlaying.refresh", "title": "Now Playing: Refresh" }
+      { "command": "nowPlaying.next", "title": "PlayBar: Next" },
+      { "command": "nowPlaying.prev", "title": "PlayBar: Previous" },
+      { "command": "nowPlaying.raise", "title": "PlayBar: Focus Player" },
+      { "command": "nowPlaying.refresh", "title": "PlayBar: Refresh" }
     ],
     "configuration": {
-      "title": "Now Playing",
+      "title": "PlayBar",
       "properties": {
         "nowPlaying.format": {
           "type": "string",

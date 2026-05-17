@@ -7,10 +7,10 @@ Palette (`Ctrl+Shift+P`).
 
 | Command                       | ID                       | Description                                  |
 |-------------------------------|--------------------------|----------------------------------------------|
-| Now Playing: Next             | `nowPlaying.next`        | Skip to the next track.                      |
-| Now Playing: Previous         | `nowPlaying.prev`        | Skip to the previous track.                  |
-| Now Playing: Focus Player     | `nowPlaying.raise`       | Raise the player window (MPRIS `Raise`).     |
-| Now Playing: Refresh          | `nowPlaying.refresh`     | Restart the sidecar and refetch state.       |
+| PlayBar: Next             | `nowPlaying.next`        | Skip to the next track.                      |
+| PlayBar: Previous         | `nowPlaying.prev`        | Skip to the previous track.                  |
+| PlayBar: Focus Player     | `nowPlaying.raise`       | Raise the player window (MPRIS `Raise`).     |
+| PlayBar: Refresh          | `nowPlaying.refresh`     | Restart the sidecar and refetch state.       |
 
 ## Keybindings
 
