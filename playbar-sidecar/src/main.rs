@@ -34,7 +34,8 @@ async fn main() -> anyhow::Result<()> {
 
     if cli.once {
         let snapshot = source.snapshot().await?;
-        println!("{}", serde_json::to_string(&snapshot)?);
+        let msg = state::Message::NowPlaying(snapshot);
+        println!("{}", serde_json::to_string(&msg)?);
         return Ok(());
     }
 

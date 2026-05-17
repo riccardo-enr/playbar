@@ -12,9 +12,10 @@ import * as path from "path";
 import * as readline from "readline";
 import * as vscode from "vscode";
 
-import { Command, NowPlaying } from "./types";
+import { Command, Message, NowPlaying, PlayersEvent } from "./types";
 
 export type StateListener = (state: NowPlaying) => void;
+export type PlayersListener = (players: PlayersEvent) => void;
 
 export class Sidecar implements vscode.Disposable {
   private proc?: ChildProcess;
@@ -26,6 +27,7 @@ export class Sidecar implements vscode.Disposable {
     private readonly binaryPath: string,
     private readonly preferredPlayer: string,
     private readonly onState: StateListener,
+    private readonly onPlayers: PlayersListener = () => {},
   ) {
     this.output = vscode.window.createOutputChannel("Now Playing");
   }
@@ -56,8 +58,21 @@ export class Sidecar implements vscode.Disposable {
         return;
       }
       try {
-        const state = JSON.parse(trimmed) as NowPlaying;
-        this.onState(state);
+        const msg = JSON.parse(trimmed) as Message;
+        switch (msg.kind) {
+          case "now_playing": {
+            const { kind: _kind, ...state } = msg;
+            this.onState(state);
+            break;
+          }
+          case "players": {
+            const { kind: _kind, ...players } = msg;
+            this.onPlayers(players);
+            break;
+          }
+          default:
+            this.output.appendLine(`unknown event kind: ${trimmed}`);
+        }
         this.restartDelayMs = 500;
       } catch (e) {
         this.output.appendLine(`bad event: ${trimmed} (${(e as Error).message})`);

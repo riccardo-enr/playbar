@@ -21,7 +21,8 @@
       { "command": "playbar.next", "title": "PlayBar: Next" },
       { "command": "playbar.prev", "title": "PlayBar: Previous" },
       { "command": "playbar.raise", "title": "PlayBar: Focus Player" },
-      { "command": "playbar.refresh", "title": "PlayBar: Refresh" }
+      { "command": "playbar.refresh", "title": "PlayBar: Refresh" },
+      { "command": "playbar.switchPlayer", "title": "PlayBar: Switch Player" }
     ],
     "configuration": {
       "title": "PlayBar",

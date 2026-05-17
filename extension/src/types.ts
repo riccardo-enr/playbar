@@ -16,6 +16,22 @@ export interface NowPlaying {
   duration_ms?: number;
 }
 
+export interface PlayerEntry {
+  id: string;
+  status: Status;
+  artist?: string;
+  title?: string;
+}
+
+export interface PlayersEvent {
+  active?: string;
+  players: PlayerEntry[];
+}
+
+export type Message =
+  | ({ kind: "now_playing" } & NowPlaying)
+  | ({ kind: "players" } & PlayersEvent);
+
 export type Command =
   | { cmd: "play" }
   | { cmd: "pause" }

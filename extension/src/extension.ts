@@ -14,12 +14,13 @@ import * as vscode from "vscode";
 import { resolveBinaryPath, Sidecar } from "./sidecar";
 import { FormatRule } from "./format";
 import { StatusBar, StatusBarOptions } from "./statusbar";
-import { NowPlaying } from "./types";
+import { NowPlaying, PlayerEntry, PlayersEvent } from "./types";
 
 interface RuntimeBits {
   sidecar: Sidecar;
   statusBar: StatusBar;
   lastState: NowPlaying;
+  lastPlayers: PlayersEvent;
 }
 
 let runtime: RuntimeBits | undefined;
@@ -42,6 +43,7 @@ export function activate(ctx: vscode.ExtensionContext) {
     vscode.commands.registerCommand("playbar.refresh", () =>
       runtime?.sidecar.send({ cmd: "refresh" }),
     ),
+    vscode.commands.registerCommand("playbar.switchPlayer", () => switchPlayer()),
     vscode.workspace.onDidChangeConfiguration((e) => {
       if (!e.affectsConfiguration("playbar")) {
         return;
@@ -82,9 +84,66 @@ function boot(ctx: vscode.ExtensionContext) {
       runtime!.lastState = state;
       statusBar.render(state);
     },
+    (players) => {
+      runtime!.lastPlayers = players;
+    },
   );
   sidecar.start();
-  runtime = { sidecar, statusBar, lastState: { status: "none" } };
+  runtime = {
+    sidecar,
+    statusBar,
+    lastState: { status: "none" },
+    lastPlayers: { players: [] },
+  };
+}
+
+/*
+ * Show a QuickPick of all currently known MPRIS players and forward the
+ * user's choice to the sidecar as `select_player`. The selection is
+ * transient: it does not write `playbar.preferredPlayer`, so a restart
+ * returns to the configured auto-pick. Showing "(none)" lets the user
+ * clear the override back to the default.
+ */
+async function switchPlayer() {
+  if (!runtime) {
+    return;
+  }
+  const players = runtime.lastPlayers.players;
+  if (players.length === 0) {
+    void vscode.window.showInformationMessage(
+      "PlayBar: no media players are currently active.",
+    );
+    return;
+  }
+  const active = runtime.lastPlayers.active;
+  type Pick = vscode.QuickPickItem & { id: string | null };
+  const items: Pick[] = players.map((p: PlayerEntry) => ({
+    id: p.id,
+    label: p.id === active ? `$(check) ${p.id}` : `    ${p.id}`,
+    description: describe(p),
+  }));
+  if (players.length > 1) {
+    items.push({ id: null, label: "$(circle-slash) (auto / clear preference)" });
+  }
+  const choice = await vscode.window.showQuickPick(items, {
+    placeHolder: "Switch active media player",
+    matchOnDescription: true,
+  });
+  if (!choice) {
+    return;
+  }
+  runtime.sidecar.send({ cmd: "select_player", name: choice.id });
+}
+
+function describe(p: PlayerEntry): string {
+  const bits: string[] = [p.status];
+  if (p.artist) {
+    bits.push(p.artist);
+  }
+  if (p.title) {
+    bits.push(p.title);
+  }
+  return bits.join(" - ");
 }
 
 function teardown() {

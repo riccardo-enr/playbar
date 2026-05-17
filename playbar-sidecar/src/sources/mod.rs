@@ -9,13 +9,13 @@
  * stub that always reports `Status::None`.
  */
 
-use crate::state::{Command, NowPlaying};
+use crate::state::{Command, Message, NowPlaying};
 use async_trait::async_trait;
 use tokio::sync::mpsc;
 
 #[async_trait]
 pub trait Source: Send {
-    /// Read the current state once.
+    /// Read the current active-player state once.
     async fn snapshot(&mut self) -> anyhow::Result<NowPlaying>;
 
     /// Apply a control command. Selecting a player updates internal state
@@ -24,7 +24,7 @@ pub trait Source: Send {
 
     /// Take ownership of the event stream. Returns `None` if events are
     /// not yet available (e.g. `--once` mode never wires this up).
-    fn take_events(&mut self) -> Option<mpsc::Receiver<NowPlaying>>;
+    fn take_events(&mut self) -> Option<mpsc::Receiver<Message>>;
 }
 
 #[cfg(target_os = "linux")]
