@@ -9,6 +9,7 @@
   },
   "publisher": "riccardo",
   "license": "MIT",
+  "icon": "assets/icon.png",
   "engines": {
     "vscode": "^1.85.0"
   },

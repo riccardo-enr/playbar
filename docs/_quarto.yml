@@ -5,6 +5,7 @@ project:
 website:
   title: "Now Playing"
   description: "VSCode status-bar extension for MPRIS media players."
+  favicon: assets/icon.png
   repo-url: https://github.com/riccardo-enr/vscode-now-playing
   repo-actions: [edit, issue]
   navbar:

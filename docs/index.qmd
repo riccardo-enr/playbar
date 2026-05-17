@@ -3,6 +3,8 @@ title: "Now Playing"
 subtitle: "MPRIS media in your VSCode status bar"
 ---
 
+![](assets/icon.png){fig-alt="Now Playing icon" width="96"}
+
 A VSCode status-bar extension that shows the currently playing media from any
 MPRIS-compatible player (Spotify, mpv, VLC, browsers, ...) and lets you
 control it without leaving the editor.
