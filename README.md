@@ -16,12 +16,12 @@ Full documentation: <https://riccardo-enr.github.io/playbar/>
 
 ## Install
 
-Grab the latest `now-playing-linux-x64-*.vsix` from the
+Grab the latest `.vsix` from the
 [Releases page](https://github.com/riccardo-enr/playbar/releases)
 and install it:
 
 ```bash
-code --install-extension now-playing-linux-x64-X.Y.Z.vsix
+code --install-extension now-playing-X.Y.Z.vsix
 ```
 
 The sidecar binary is bundled inside the VSIX, so no separate build step is
