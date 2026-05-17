@@ -2,7 +2,7 @@
   "name": "playbar",
   "displayName": "PlayBar",
   "description": "Show the currently playing media (MPRIS) in the VSCode status bar.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/riccardo-enr/playbar.git"
