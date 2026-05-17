@@ -11,6 +11,9 @@ on:
 permissions:
   contents: write
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
 jobs:
   vsix:
     runs-on: ubuntu-latest
@@ -39,6 +42,9 @@ jobs:
         run: |
           mkdir -p extension/bin/linux-x64
           cp now-playing/target/release/now-playing extension/bin/linux-x64/
+
+      - name: Stage LICENSE into extension
+        run: cp LICENSE extension/LICENSE
 
       - name: Install extension deps
         working-directory: extension
