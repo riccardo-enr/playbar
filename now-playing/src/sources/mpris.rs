@@ -262,6 +262,7 @@ async fn read_player_state(conn: &Connection, bus: &str) -> anyhow::Result<NowPl
     let artist = string_array_field(&metadata, "xesam:artist").map(|v| v.join(", "));
     let art_url = string_field(&metadata, "mpris:artUrl");
     let duration_us: Option<i64> = i64_field(&metadata, "mpris:length");
+    let year = string_field(&metadata, "xesam:contentCreated").and_then(parse_year);
 
     Ok(NowPlaying {
         player: Some(suffix),
@@ -270,9 +271,22 @@ async fn read_player_state(conn: &Connection, bus: &str) -> anyhow::Result<NowPl
         title,
         album,
         art_url,
+        year,
         position_ms: Some((position_us.max(0) as u64) / 1000),
         duration_ms: duration_us.map(|d| (d.max(0) as u64) / 1000),
     })
+}
+
+/*
+ * Parse a `xesam:contentCreated` value (ISO 8601 like "2003-04-15T00:00:00Z",
+ * or sometimes just a 4-digit year) into a calendar year.
+ */
+fn parse_year(s: String) -> Option<u16> {
+    let digits: String = s.chars().take_while(|c| c.is_ascii_digit()).collect();
+    if digits.len() < 4 {
+        return None;
+    }
+    digits[..4].parse().ok()
 }
 
 fn parse_status(s: &str) -> Status {
