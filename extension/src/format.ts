@@ -25,9 +25,23 @@ const DEFAULT_PLAYER_ICONS: Record<string, string> = {
   rhythmbox: "$(music)",
 };
 
+export interface FormatRule {
+  when: Record<string, string>;
+  format: string;
+}
+
 export interface FormatExtras {
   playerIcons?: Record<string, string>;
+  rules?: FormatRule[];
 }
+
+const MATCHABLE_FIELDS = new Set([
+  "title",
+  "artist",
+  "album",
+  "player",
+  "status",
+]);
 
 export function format(
   state: NowPlaying,
@@ -35,6 +49,7 @@ export function format(
   maxLength: number,
   extras: FormatExtras = {},
 ): string {
+  const effectiveTemplate = pickTemplate(state, template, extras.rules ?? []);
   const fields: Record<string, string> = {
     playerIcon: playerIconFor(state.player, extras.playerIcons ?? {}),
     artist: state.artist ?? "",
@@ -45,7 +60,7 @@ export function format(
     player: state.player ?? "",
     status: state.status,
   };
-  let out = template.replace(/\{(\w+)\}/g, (_, k) => fields[k] ?? "");
+  let out = effectiveTemplate.replace(/\{(\w+)\}/g, (_, k) => fields[k] ?? "");
   out = out.replace(/\s*-\s*-\s*/g, " - ");
   out = out.replace(/\s{2,}/g, " ").trim();
   out = out.replace(/-\s*$/, "").replace(/^\s*-/, "").trim();
@@ -53,6 +68,50 @@ export function format(
     out = out.slice(0, Math.max(1, maxLength - 1)) + "…";
   }
   return out;
+}
+
+function pickTemplate(
+  state: NowPlaying,
+  defaultTemplate: string,
+  rules: FormatRule[],
+): string {
+  for (const rule of rules) {
+    if (!rule || typeof rule.format !== "string" || !rule.when) {
+      continue;
+    }
+    if (ruleMatches(state, rule.when)) {
+      return rule.format;
+    }
+  }
+  return defaultTemplate;
+}
+
+function ruleMatches(state: NowPlaying, when: Record<string, string>): boolean {
+  const entries = Object.entries(when);
+  if (entries.length === 0) {
+    return false;
+  }
+  for (const [field, pattern] of entries) {
+    if (!MATCHABLE_FIELDS.has(field) || typeof pattern !== "string") {
+      return false;
+    }
+    let re: RegExp;
+    try {
+      re = new RegExp(pattern, "i");
+    } catch {
+      return false;
+    }
+    const value =
+      field === "title" ? state.title ?? "" :
+      field === "artist" ? state.artist ?? "" :
+      field === "album" ? state.album ?? "" :
+      field === "player" ? state.player ?? "" :
+      state.status;
+    if (!re.test(value)) {
+      return false;
+    }
+  }
+  return true;
 }
 
 function playerIconFor(

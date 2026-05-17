@@ -71,6 +71,26 @@
           "default": 0,
           "description": "Hide the status bar after the player has been stopped (or otherwise idle) for this many seconds. 0 disables."
         },
+        "nowPlaying.formatRules": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "object",
+            "required": ["when", "format"],
+            "properties": {
+              "when": {
+                "type": "object",
+                "description": "Field-to-regex map (case-insensitive). All listed fields must match. Allowed fields: title, artist, album, player, status.",
+                "additionalProperties": { "type": "string" }
+              },
+              "format": {
+                "type": "string",
+                "description": "Template string used when this rule fires. Same placeholders as nowPlaying.format."
+              }
+            }
+          },
+          "description": "Ordered list of override rules. First match wins; the rule's format replaces nowPlaying.format. Example: [{\"when\":{\"title\":\"Netflix\"},\"format\":\"Netflix\"}]."
+        },
         "nowPlaying.playerIcons": {
           "type": "object",
           "default": {},

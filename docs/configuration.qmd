@@ -13,6 +13,23 @@ All settings live under the `nowPlaying.*` namespace in VSCode's settings.
 | `nowPlaying.showControls`     | `true`                           | Show separate prev/next status bar buttons. |
 | `nowPlaying.preferredPlayer`  | `""`                             | Preferred MPRIS player suffix (e.g. `spotify`). Empty = first available. |
 | `nowPlaying.sidecarPath`      | `""`                             | Path to the `now-playing` binary. Empty = use bundled binary. |
+| `nowPlaying.formatRules`      | `[]`                             | Ordered overrides. Each rule is `{ when: { field: regex, ... }, format: "..." }`. First match wins. |
+
+## Per-media overrides
+
+`nowPlaying.formatRules` lets you swap the template for specific media. Each
+rule's `when` block is a field-to-regex map (case-insensitive); all listed
+fields must match. Matchable fields: `title`, `artist`, `album`, `player`,
+`status`.
+
+```json
+{
+  "nowPlaying.formatRules": [
+    { "when": { "title": "Netflix" }, "format": "$(device-camera-video) Netflix" },
+    { "when": { "player": "spotify" }, "format": "$(music) {artist} - {title}" }
+  ]
+}
+```
 
 ## Format placeholders
 

@@ -7,7 +7,7 @@
 import * as vscode from "vscode";
 
 import { ArtCache } from "./artcache";
-import { format } from "./format";
+import { format, FormatRule } from "./format";
 import { NowPlaying, Status } from "./types";
 
 export interface StatusBarOptions {
@@ -19,6 +19,7 @@ export interface StatusBarOptions {
   hidePausedAfterSeconds: number;
   hideIdleAfterSeconds: number;
   playerIcons: Record<string, string>;
+  formatRules: FormatRule[];
 }
 
 export class StatusBar implements vscode.Disposable {
@@ -82,6 +83,7 @@ export class StatusBar implements vscode.Disposable {
     this.lastState = state;
     this.main.text = format(state, this.opts.template, this.opts.maxLength, {
       playerIcons: this.opts.playerIcons,
+      rules: this.opts.formatRules,
     });
     const artDataUrl = this.resolveArt(state.art_url);
     const key = tooltipKey(state, artDataUrl);

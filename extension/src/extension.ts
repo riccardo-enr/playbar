@@ -12,6 +12,7 @@
 import * as vscode from "vscode";
 
 import { resolveBinaryPath, Sidecar } from "./sidecar";
+import { FormatRule } from "./format";
 import { StatusBar, StatusBarOptions } from "./statusbar";
 import { NowPlaying } from "./types";
 
@@ -66,6 +67,7 @@ function boot(ctx: vscode.ExtensionContext) {
     hidePausedAfterSeconds: cfg.get<number>("hidePausedAfterSeconds", 0),
     hideIdleAfterSeconds: cfg.get<number>("hideIdleAfterSeconds", 0),
     playerIcons: cfg.get<Record<string, string>>("playerIcons", {}),
+    formatRules: cfg.get<FormatRule[]>("formatRules", []),
   };
   const statusBar = new StatusBar(opts);
   const binary = resolveBinaryPath(ctx.extensionPath, cfg.get<string>("sidecarPath", ""));
