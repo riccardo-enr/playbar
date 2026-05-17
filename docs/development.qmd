@@ -5,7 +5,7 @@ title: "Development"
 ## Repository layout
 
 ```
-now-playing/   Rust sidecar (the OS-facing binary)
+playbar-sidecar/   Rust sidecar (the OS-facing binary)
 extension/     VSCode extension shim (TypeScript)
 docs/          This Quarto site
 ```
@@ -14,7 +14,7 @@ docs/          This Quarto site
 
 ```bash
 # Sidecar
-cd now-playing
+cd playbar-sidecar
 cargo build --release
 
 # Extension
@@ -24,14 +24,14 @@ npm run compile
 
 # Place the sidecar where the extension expects it (Linux x86_64):
 mkdir -p bin/linux-x64
-cp ../now-playing/target/release/now-playing bin/linux-x64/
+cp ../playbar-sidecar/target/release/playbar bin/linux-x64/
 ```
 
 ## Run the Extension Development Host
 
 Open `extension/` in VSCode and press `F5`. To point at a checked-out debug
 binary instead of the bundled release, set
-[`nowPlaying.sidecarPath`](configuration.qmd) in your user settings.
+[`playbar.sidecarPath`](configuration.qmd) in your user settings.
 
 ## Packaging a VSIX
 

@@ -23,7 +23,7 @@ jobs:
       - uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
           toolchain: stable
-          cache-workspaces: now-playing
+          cache-workspaces: playbar
 
       - uses: actions/setup-node@v4
         with:
@@ -35,13 +35,13 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y libdbus-1-dev pkg-config
 
       - name: Build sidecar (linux-x64)
-        working-directory: now-playing
+        working-directory: playbar
         run: cargo build --release
 
       - name: Stage sidecar into extension
         run: |
           mkdir -p extension/bin/linux-x64
-          cp now-playing/target/release/now-playing extension/bin/linux-x64/
+          cp playbar-sidecar/target/release/playbar extension/bin/linux-x64/
 
       - name: Stage LICENSE into extension
         run: cp LICENSE extension/LICENSE
@@ -62,7 +62,7 @@ jobs:
         working-directory: extension
         run: |
           vsix=$(ls *.vsix | head -n1)
-          unzip -l "$vsix" | grep -q 'extension/bin/linux-x64/now-playing$' \
+          unzip -l "$vsix" | grep -q 'extension/bin/linux-x64/playbar$' \
             || { echo "::error::sidecar binary not found inside $vsix"; exit 1; }
 
       - uses: actions/upload-artifact@v4

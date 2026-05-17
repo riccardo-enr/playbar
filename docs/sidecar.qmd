@@ -2,16 +2,16 @@
 title: "Sidecar"
 ---
 
-The `now-playing` Rust binary is a thin MPRIS-to-NDJSON bridge. It can be
+The `playbar` Rust binary is a thin MPRIS-to-NDJSON bridge. It can be
 used standalone, independent of the VSCode extension.
 
 ## CLI
 
 ```bash
-now-playing --once                       # one JSON snapshot, then exit
-now-playing                              # event stream on stdout
-echo next | now-playing                  # control via stdin
-now-playing --player spotify             # restrict to a specific player
+playbar --once                       # one JSON snapshot, then exit
+playbar                              # event stream on stdout
+echo next | playbar                  # control via stdin
+playbar --player spotify             # restrict to a specific player
 ```
 
 ## Output format

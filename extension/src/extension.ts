@@ -30,20 +30,20 @@ export function activate(ctx: vscode.ExtensionContext) {
   bring();
 
   ctx.subscriptions.push(
-    vscode.commands.registerCommand("nowPlaying.next", () =>
+    vscode.commands.registerCommand("playbar.next", () =>
       runtime?.sidecar.send({ cmd: "next" }),
     ),
-    vscode.commands.registerCommand("nowPlaying.prev", () =>
+    vscode.commands.registerCommand("playbar.prev", () =>
       runtime?.sidecar.send({ cmd: "prev" }),
     ),
-    vscode.commands.registerCommand("nowPlaying.raise", () =>
+    vscode.commands.registerCommand("playbar.raise", () =>
       runtime?.sidecar.send({ cmd: "raise" }),
     ),
-    vscode.commands.registerCommand("nowPlaying.refresh", () =>
+    vscode.commands.registerCommand("playbar.refresh", () =>
       runtime?.sidecar.send({ cmd: "refresh" }),
     ),
     vscode.workspace.onDidChangeConfiguration((e) => {
-      if (!e.affectsConfiguration("nowPlaying")) {
+      if (!e.affectsConfiguration("playbar")) {
         return;
       }
       teardown();
@@ -57,7 +57,7 @@ export function deactivate() {
 }
 
 function boot(ctx: vscode.ExtensionContext) {
-  const cfg = vscode.workspace.getConfiguration("nowPlaying");
+  const cfg = vscode.workspace.getConfiguration("playbar");
   const opts: StatusBarOptions = {
     alignment: cfg.get<"left" | "right">("alignment", "right"),
     priority: cfg.get<number>("priority", 100),

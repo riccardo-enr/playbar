@@ -34,7 +34,7 @@ and Windows are not supported.
 ## Quick start
 
 ```bash
-code --install-extension now-playing-linux-x64-<version>.vsix
+code --install-extension playbar-<version>.vsix
 ```
 
 See [Install](install.qmd) for details and [Configuration](configuration.qmd)

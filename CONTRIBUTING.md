@@ -1,7 +1,7 @@
 # Contributing
 
 Thanks for your interest in improving PlayBar. This project has two
-components — a Rust MPRIS sidecar (`now-playing/`) and a TypeScript VSCode
+components — a Rust MPRIS sidecar (`playbar-sidecar/`) and a TypeScript VSCode
 extension (`extension/`) — and contributions to either are welcome.
 
 ## Scope
@@ -17,7 +17,7 @@ git clone https://github.com/riccardo-enr/playbar
 cd playbar
 
 # Sidecar
-cd now-playing
+cd playbar-sidecar
 cargo build
 
 # Extension
@@ -27,7 +27,7 @@ npm run compile
 ```
 
 To run the extension against a debug sidecar, open `extension/` in VSCode,
-press F5, and set `nowPlaying.sidecarPath` to your `target/debug/now-playing`
+press F5, and set `playbar.sidecarPath` to your `target/debug/playbar`
 binary.
 
 ## Workflow
@@ -64,7 +64,7 @@ Common types: `feat`, `fix`, `chore`, `docs`, `refactor`, `test`.
 
 ## Testing
 
-- Sidecar: `cargo test` from `now-playing/`.
+- Sidecar: `cargo test` from `playbar-sidecar/`.
 - Extension: exercise the Extension Development Host (F5) against a real
   MPRIS player (Spotify, mpv, Firefox) and verify the status bar updates
   for play, pause, stop, and player switching.
@@ -86,6 +86,6 @@ Open a GitHub issue with:
 
 - Your Linux distribution and desktop environment.
 - The MPRIS player and its version.
-- Sidecar output from `now-playing --once` (and the event stream if the bug
+- Sidecar output from `playbar --once` (and the event stream if the bug
   is timing-related).
-- VSCode version and the relevant `nowPlaying.*` settings.
+- VSCode version and the relevant `playbar.*` settings.

@@ -1,5 +1,5 @@
 {
-  "name": "now-playing",
+  "name": "playbar",
   "displayName": "PlayBar",
   "description": "Show the currently playing media (MPRIS) in the VSCode status bar.",
   "version": "0.2.0",
@@ -18,61 +18,61 @@
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
-      { "command": "nowPlaying.next", "title": "PlayBar: Next" },
-      { "command": "nowPlaying.prev", "title": "PlayBar: Previous" },
-      { "command": "nowPlaying.raise", "title": "PlayBar: Focus Player" },
-      { "command": "nowPlaying.refresh", "title": "PlayBar: Refresh" }
+      { "command": "playbar.next", "title": "PlayBar: Next" },
+      { "command": "playbar.prev", "title": "PlayBar: Previous" },
+      { "command": "playbar.raise", "title": "PlayBar: Focus Player" },
+      { "command": "playbar.refresh", "title": "PlayBar: Refresh" }
     ],
     "configuration": {
       "title": "PlayBar",
       "properties": {
-        "nowPlaying.format": {
+        "playbar.format": {
           "type": "string",
           "default": "{playerIcon} {artist} - {title}",
           "description": "Status bar format. Placeholders: {playerIcon}, {artist}, {title}, {album}, {position}, {length}, {player}, {status}. {playerIcon} resolves the player-specific icon; {position} and {length} render as mm:ss (h:mm:ss when over one hour)."
         },
-        "nowPlaying.maxLength": {
+        "playbar.maxLength": {
           "type": "number",
           "default": 50,
           "description": "Max characters before truncation with ellipsis."
         },
-        "nowPlaying.alignment": {
+        "playbar.alignment": {
           "type": "string",
           "enum": ["left", "right"],
           "default": "right",
           "description": "Status bar alignment."
         },
-        "nowPlaying.priority": {
+        "playbar.priority": {
           "type": "number",
           "default": 100,
           "description": "Status bar priority (higher = further from edges)."
         },
-        "nowPlaying.showControls": {
+        "playbar.showControls": {
           "type": "boolean",
           "default": true,
           "description": "Show separate prev/play-pause/next status bar buttons."
         },
-        "nowPlaying.preferredPlayer": {
+        "playbar.preferredPlayer": {
           "type": "string",
           "default": "",
           "description": "Preferred MPRIS player suffix (e.g. 'spotify'). Empty = first available."
         },
-        "nowPlaying.sidecarPath": {
+        "playbar.sidecarPath": {
           "type": "string",
           "default": "",
-          "description": "Path to the now-playing binary. Empty = use bundled binary."
+          "description": "Path to the playbar binary. Empty = use bundled binary."
         },
-        "nowPlaying.hidePausedAfterSeconds": {
+        "playbar.hidePausedAfterSeconds": {
           "type": "number",
           "default": 0,
           "description": "Hide the status bar after the player has been paused for this many seconds. 0 disables."
         },
-        "nowPlaying.hideIdleAfterSeconds": {
+        "playbar.hideIdleAfterSeconds": {
           "type": "number",
           "default": 0,
           "description": "Hide the status bar after the player has been stopped (or otherwise idle) for this many seconds. 0 disables."
         },
-        "nowPlaying.formatRules": {
+        "playbar.formatRules": {
           "type": "array",
           "default": [],
           "items": {
@@ -86,33 +86,33 @@
               },
               "format": {
                 "type": "string",
-                "description": "Template string used when this rule fires. Same placeholders as nowPlaying.format."
+                "description": "Template string used when this rule fires. Same placeholders as playbar.format."
               }
             }
           },
-          "description": "Ordered list of override rules. First match wins; the rule's format replaces nowPlaying.format. Example: [{\"when\":{\"title\":\"Netflix\"},\"format\":\"Netflix\"}]."
+          "description": "Ordered list of override rules. First match wins; the rule's format replaces playbar.format. Example: [{\"when\":{\"title\":\"Netflix\"},\"format\":\"Netflix\"}]."
         },
-        "nowPlaying.marquee.enabled": {
+        "playbar.marquee.enabled": {
           "type": "boolean",
           "default": false,
-          "description": "Scroll the status bar text as a marquee when it exceeds nowPlaying.maxLength, instead of truncating with an ellipsis."
+          "description": "Scroll the status bar text as a marquee when it exceeds playbar.maxLength, instead of truncating with an ellipsis."
         },
-        "nowPlaying.marquee.speedMs": {
+        "playbar.marquee.speedMs": {
           "type": "number",
           "default": 300,
           "description": "Milliseconds between marquee shifts (lower = faster scroll)."
         },
-        "nowPlaying.marquee.pauseEndsMs": {
+        "playbar.marquee.pauseEndsMs": {
           "type": "number",
           "default": 1500,
           "description": "Milliseconds to pause when the marquee wraps back to the start."
         },
-        "nowPlaying.marquee.gap": {
+        "playbar.marquee.gap": {
           "type": "string",
           "default": "   ",
           "description": "Separator inserted between end and start of the marquee loop."
         },
-        "nowPlaying.playerIcons": {
+        "playbar.playerIcons": {
           "type": "object",
           "default": {},
           "additionalProperties": { "type": "string" },

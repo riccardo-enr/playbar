@@ -2,29 +2,29 @@
 title: "Configuration"
 ---
 
-All settings live under the `nowPlaying.*` namespace in VSCode's settings.
+All settings live under the `playbar.*` namespace in VSCode's settings.
 
 | Setting                              | Default                              | Description |
 |--------------------------------------|--------------------------------------|-------------|
-| `nowPlaying.format`                  | `{playerIcon} {artist} - {title}`    | Status bar format. See *Format placeholders* below. |
-| `nowPlaying.maxLength`               | `50`                                 | Max characters before truncation with ellipsis (or marquee scrolling, if enabled). |
-| `nowPlaying.alignment`               | `right`                              | Status bar alignment (`left` or `right`). |
-| `nowPlaying.priority`                | `100`                                | Status bar priority (higher = further from edges). |
-| `nowPlaying.showControls`            | `true`                               | Show separate prev/play-pause/next status bar buttons. |
-| `nowPlaying.preferredPlayer`         | `""`                                 | Preferred MPRIS player suffix (e.g. `spotify`). Empty = first available. |
-| `nowPlaying.sidecarPath`             | `""`                                 | Path to the `now-playing` binary. Empty = use bundled binary. |
-| `nowPlaying.hidePausedAfterSeconds`  | `0`                                  | Hide the bar after the player has been paused this many seconds. `0` disables. |
-| `nowPlaying.hideIdleAfterSeconds`    | `0`                                  | Hide the bar after the player has been stopped/idle this many seconds. `0` disables. |
-| `nowPlaying.formatRules`             | `[]`                                 | Ordered overrides. Each rule is `{ when: { field: regex, ... }, format: "..." }`. First match wins. |
-| `nowPlaying.playerIcons`             | `{}`                                 | Override or extend the built-in `{playerIcon}` map. Keys are MPRIS bus suffixes; values are codicon strings. |
-| `nowPlaying.marquee.enabled`         | `false`                              | Scroll the status bar text as a marquee when it exceeds `maxLength`, instead of truncating. |
-| `nowPlaying.marquee.speedMs`         | `300`                                | Milliseconds between marquee shifts (lower = faster). |
-| `nowPlaying.marquee.pauseEndsMs`     | `1500`                               | Milliseconds to pause when the marquee wraps back to the start. |
-| `nowPlaying.marquee.gap`             | `"   "`                              | Separator inserted between end and start of the marquee loop. |
+| `playbar.format`                  | `{playerIcon} {artist} - {title}`    | Status bar format. See *Format placeholders* below. |
+| `playbar.maxLength`               | `50`                                 | Max characters before truncation with ellipsis (or marquee scrolling, if enabled). |
+| `playbar.alignment`               | `right`                              | Status bar alignment (`left` or `right`). |
+| `playbar.priority`                | `100`                                | Status bar priority (higher = further from edges). |
+| `playbar.showControls`            | `true`                               | Show separate prev/play-pause/next status bar buttons. |
+| `playbar.preferredPlayer`         | `""`                                 | Preferred MPRIS player suffix (e.g. `spotify`). Empty = first available. |
+| `playbar.sidecarPath`             | `""`                                 | Path to the `playbar` binary. Empty = use bundled binary. |
+| `playbar.hidePausedAfterSeconds`  | `0`                                  | Hide the bar after the player has been paused this many seconds. `0` disables. |
+| `playbar.hideIdleAfterSeconds`    | `0`                                  | Hide the bar after the player has been stopped/idle this many seconds. `0` disables. |
+| `playbar.formatRules`             | `[]`                                 | Ordered overrides. Each rule is `{ when: { field: regex, ... }, format: "..." }`. First match wins. |
+| `playbar.playerIcons`             | `{}`                                 | Override or extend the built-in `{playerIcon}` map. Keys are MPRIS bus suffixes; values are codicon strings. |
+| `playbar.marquee.enabled`         | `false`                              | Scroll the status bar text as a marquee when it exceeds `maxLength`, instead of truncating. |
+| `playbar.marquee.speedMs`         | `300`                                | Milliseconds between marquee shifts (lower = faster). |
+| `playbar.marquee.pauseEndsMs`     | `1500`                               | Milliseconds to pause when the marquee wraps back to the start. |
+| `playbar.marquee.gap`             | `"   "`                              | Separator inserted between end and start of the marquee loop. |
 
 ## Format placeholders
 
-The `nowPlaying.format` string is rendered with these substitutions:
+The `playbar.format` string is rendered with these substitutions:
 
 | Placeholder    | Value                                                            |
 |----------------|------------------------------------------------------------------|
@@ -45,21 +45,21 @@ You can also embed VSCode codicons via the `$(icon-name)` syntax:
 
 ```json
 {
-  "nowPlaying.format": "$(unmute) {artist} - {title}",
-  "nowPlaying.maxLength": 60
+  "playbar.format": "$(unmute) {artist} - {title}",
+  "playbar.maxLength": 60
 }
 ```
 
 ## Per-media overrides
 
-`nowPlaying.formatRules` lets you swap the template for specific media. Each
+`playbar.formatRules` lets you swap the template for specific media. Each
 rule's `when` block is a field-to-regex map (case-insensitive); all listed
 fields must match. Matchable fields: `title`, `artist`, `album`, `player`,
 `status`.
 
 ```json
 {
-  "nowPlaying.formatRules": [
+  "playbar.formatRules": [
     { "when": { "title": "Netflix" }, "format": "$(device-camera-video) Netflix" },
     { "when": { "player": "spotify" }, "format": "$(music) {artist} - {title}" }
   ]
@@ -69,13 +69,13 @@ fields must match. Matchable fields: `title`, `artist`, `album`, `player`,
 ## Player icons
 
 `{playerIcon}` resolves via a merged map (built-in defaults + the user
-setting `nowPlaying.playerIcons`). Keys are the MPRIS bus suffix
+setting `playbar.playerIcons`). Keys are the MPRIS bus suffix
 (`state.player`); values are codicon strings. Players that expose suffixes
 like `firefox.instance_1_84` fall back to the prefix before the first dot.
 
 ```json
 {
-  "nowPlaying.playerIcons": {
+  "playbar.playerIcons": {
     "spotify": "$(megaphone)",
     "amberol": "$(music)"
   }
@@ -84,16 +84,16 @@ like `firefox.instance_1_84` fall back to the prefix before the first dot.
 
 ## Marquee scrolling
 
-When the rendered status bar text is longer than `nowPlaying.maxLength`, the
+When the rendered status bar text is longer than `playbar.maxLength`, the
 default behavior is to truncate with an ellipsis. Set
-`nowPlaying.marquee.enabled` to `true` to scroll the text instead:
+`playbar.marquee.enabled` to `true` to scroll the text instead:
 
 ```json
 {
-  "nowPlaying.marquee.enabled": true,
-  "nowPlaying.marquee.speedMs": 250,
-  "nowPlaying.marquee.pauseEndsMs": 2000,
-  "nowPlaying.marquee.gap": "   ***   "
+  "playbar.marquee.enabled": true,
+  "playbar.marquee.speedMs": 250,
+  "playbar.marquee.pauseEndsMs": 2000,
+  "playbar.marquee.gap": "   ***   "
 }
 ```
 
@@ -115,7 +115,7 @@ its bus name (the part after `org.mpris.MediaPlayer2.`):
 
 ```json
 {
-  "nowPlaying.preferredPlayer": "spotify"
+  "playbar.preferredPlayer": "spotify"
 }
 ```
 

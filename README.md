@@ -5,7 +5,7 @@
 # PlayBar
 
 VSCode status-bar extension that mirrors `tmux-powerline`'s music segment.
-A small Rust sidecar (`now-playing/`) talks to MPRIS over D-Bus and emits
+A small Rust sidecar (`playbar-sidecar/`) talks to MPRIS over D-Bus and emits
 NDJSON; a thin TypeScript extension (`extension/`) renders the result.
 
 Full documentation: <https://riccardo-enr.github.io/playbar/>
@@ -21,17 +21,17 @@ Grab the latest `.vsix` from the
 and install it:
 
 ```bash
-code --install-extension now-playing-X.Y.Z.vsix
+code --install-extension playbar-X.Y.Z.vsix
 ```
 
 The sidecar binary is bundled inside the VSIX, so no separate build step is
 required. To point at a checked-out debug binary instead, set
-`nowPlaying.sidecarPath` in your VSCode settings.
+`playbar.sidecarPath` in your VSCode settings.
 
 ## Layout
 
 ```
-now-playing/   Rust sidecar (the OS-facing binary)
+playbar-sidecar/   Rust sidecar (the OS-facing binary)
 extension/     VSCode extension shim (TypeScript)
 ```
 
@@ -39,7 +39,7 @@ extension/     VSCode extension shim (TypeScript)
 
 ```bash
 # Sidecar
-cd now-playing
+cd playbar-sidecar
 cargo build --release
 
 # Extension
@@ -49,16 +49,16 @@ npm run compile
 
 # Place the sidecar where the extension expects it (Linux x86_64):
 mkdir -p bin/linux-x64
-cp ../now-playing/target/release/now-playing bin/linux-x64/
+cp ../playbar-sidecar/target/release/playbar bin/linux-x64/
 ```
 
 To run the extension, open `extension/` in VSCode and press F5 (Extension
-Development Host). Override `nowPlaying.sidecarPath` in settings if you'd
+Development Host). Override `playbar.sidecarPath` in settings if you'd
 rather point at a checked-out debug binary.
 
 ## Configuration
 
-`nowPlaying.format` accepts a template string with the following placeholders:
+`playbar.format` accepts a template string with the following placeholders:
 
 | Token        | Renders                                                          |
 |--------------|------------------------------------------------------------------|
@@ -78,7 +78,7 @@ gracefully when a player does not expose position or album metadata.
 ### Player icons
 
 `{playerIcon}` resolves via a merged map (built-in defaults + the user
-setting `nowPlaying.playerIcons`). Keys are the MPRIS bus suffix
+setting `playbar.playerIcons`). Keys are the MPRIS bus suffix
 (`state.player`); values are codicon strings.
 
 Built-in defaults:
@@ -101,7 +101,7 @@ dot, so `firefox.*` resolves via the `firefox` entry. To override or add
 entries:
 
 ```json
-"nowPlaying.playerIcons": {
+"playbar.playerIcons": {
   "spotify": "$(megaphone)",
   "amberol": "$(music)"
 }
@@ -112,14 +112,14 @@ entries:
 Two grace-period settings keep the status bar tidy when nothing is actively
 playing. Both default to `0` (disabled).
 
-- `nowPlaying.hidePausedAfterSeconds` — hide once the player has been paused
+- `playbar.hidePausedAfterSeconds` — hide once the player has been paused
   for that many seconds. The bar reappears as soon as playback resumes.
-- `nowPlaying.hideIdleAfterSeconds` — same idea when the player is stopped.
+- `playbar.hideIdleAfterSeconds` — same idea when the player is stopped.
 
 ### Marquee
 
-When the rendered text is wider than `nowPlaying.maxLength`, the default is
-to truncate with an ellipsis. Set `nowPlaying.marquee.enabled` to `true` to
+When the rendered text is wider than `playbar.maxLength`, the default is
+to truncate with an ellipsis. Set `playbar.marquee.enabled` to `true` to
 scroll the text instead. Tune `marquee.speedMs`, `marquee.pauseEndsMs`, and
 `marquee.gap` to taste — see the [configuration page](docs/configuration.qmd)
 for defaults.
@@ -135,8 +135,8 @@ available.
 The sidecar is useful by itself:
 
 ```bash
-now-playing --once                       # one JSON snapshot, then exit
-now-playing                              # event stream on stdout
-echo next | now-playing                  # control via stdin (also accepts JSON)
-now-playing --player spotify             # restrict to a specific player
+playbar --once                       # one JSON snapshot, then exit
+playbar                              # event stream on stdout
+echo next | playbar                  # control via stdin (also accepts JSON)
+playbar --player spotify             # restrict to a specific player
 ```

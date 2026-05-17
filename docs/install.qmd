@@ -8,10 +8,10 @@ Grab the latest `.vsix` from the
 [Releases page](https://github.com/riccardo-enr/playbar/releases):
 
 ```bash
-code --install-extension now-playing-linux-x64-<version>.vsix
+code --install-extension playbar-<version>.vsix
 ```
 
-The Linux x86_64 build bundles the `now-playing` sidecar binary, so no extra
+The Linux x86_64 build bundles the `playbar` sidecar binary, so no extra
 setup is needed.
 
 ## From source
@@ -31,7 +31,7 @@ locally and running the Extension Development Host.
 - **Nothing in the status bar** — confirm a player is running and exposes
   MPRIS: `busctl --user list | grep mpris`.
 - **Wrong player picked** — set
-  [`nowPlaying.preferredPlayer`](configuration.qmd) to the suffix of the bus
+  [`playbar.preferredPlayer`](configuration.qmd) to the suffix of the bus
   name (e.g. `spotify`).
 - **Custom sidecar build** — point
-  [`nowPlaying.sidecarPath`](configuration.qmd) at the binary.
+  [`playbar.sidecarPath`](configuration.qmd) at the binary.

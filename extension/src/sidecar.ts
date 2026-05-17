@@ -1,5 +1,5 @@
 /*
- * Sidecar lifecycle: spawn the `now-playing` Rust binary, parse its
+ * Sidecar lifecycle: spawn the `playbar` Rust binary, parse its
  * NDJSON stdout into typed events, restart with capped exponential
  * backoff if it exits, and forward shutdown via SIGTERM on dispose.
  *
@@ -111,8 +111,8 @@ export function resolveBinaryPath(extensionPath: string, override: string): stri
   if (override) {
     return override;
   }
-  // Bundled binary lives under bin/<platform>-<arch>/now-playing[.exe].
+  // Bundled binary lives under bin/<platform>-<arch>/playbar[.exe].
   const triple = `${process.platform}-${process.arch}`;
-  const exe = process.platform === "win32" ? "now-playing.exe" : "now-playing";
+  const exe = process.platform === "win32" ? "playbar.exe" : "playbar";
   return path.join(extensionPath, "bin", triple, exe);
 }

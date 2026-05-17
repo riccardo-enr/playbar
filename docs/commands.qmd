@@ -7,10 +7,10 @@ Palette (`Ctrl+Shift+P`).
 
 | Command                       | ID                       | Description                                  |
 |-------------------------------|--------------------------|----------------------------------------------|
-| PlayBar: Next             | `nowPlaying.next`        | Skip to the next track.                      |
-| PlayBar: Previous         | `nowPlaying.prev`        | Skip to the previous track.                  |
-| PlayBar: Focus Player     | `nowPlaying.raise`       | Raise the player window (MPRIS `Raise`).     |
-| PlayBar: Refresh          | `nowPlaying.refresh`     | Restart the sidecar and refetch state.       |
+| PlayBar: Next             | `playbar.next`        | Skip to the next track.                      |
+| PlayBar: Previous         | `playbar.prev`        | Skip to the previous track.                  |
+| PlayBar: Focus Player     | `playbar.raise`       | Raise the player window (MPRIS `Raise`).     |
+| PlayBar: Refresh          | `playbar.refresh`     | Restart the sidecar and refetch state.       |
 
 ## Keybindings
 
@@ -18,14 +18,14 @@ Bind any command from `keybindings.json`:
 
 ```json
 [
-  { "key": "ctrl+alt+right", "command": "nowPlaying.next" },
-  { "key": "ctrl+alt+left",  "command": "nowPlaying.prev" }
+  { "key": "ctrl+alt+right", "command": "playbar.next" },
+  { "key": "ctrl+alt+left",  "command": "playbar.prev" }
 ]
 ```
 
 ## Status bar
 
-- Click the **track title** to run `nowPlaying.raise` and focus the player.
+- Click the **track title** to run `playbar.raise` and focus the player.
 - The prev/next buttons appear when
-  [`nowPlaying.showControls`](configuration.qmd) is enabled.
+  [`playbar.showControls`](configuration.qmd) is enabled.
 - Hover the title to see album, player, status, and album art.

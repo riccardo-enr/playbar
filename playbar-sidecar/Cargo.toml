@@ -1,12 +1,12 @@
 [package]
-name = "now-playing"
+name = "playbar"
 version = "0.2.0"
 edition = "2021"
-description = "Sidecar that reports the current MPRIS now-playing state as NDJSON"
+description = "Sidecar that reports the current MPRIS playbar state as NDJSON"
 license = "MIT"
 
 [[bin]]
-name = "now-playing"
+name = "playbar"
 path = "src/main.rs"
 
 [dependencies]

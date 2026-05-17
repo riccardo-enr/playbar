@@ -1,5 +1,5 @@
 /*
- * `now-playing` sidecar entry point.
+ * `playbar` sidecar entry point.
  *
  * Two run modes:
  *   - default: long-running. Subscribe to media-player events, emit one
@@ -15,7 +15,7 @@ mod sources;
 use clap::Parser;
 
 #[derive(Debug, Parser)]
-#[command(name = "now-playing", version, about)]
+#[command(name = "playbar", version, about)]
 struct Cli {
     /// Print a single snapshot as JSON and exit.
     #[arg(long)]

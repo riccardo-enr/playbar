@@ -52,22 +52,22 @@ export class StatusBar implements vscode.Disposable {
     // Micro-fractional offsets keep the group contiguous so no other
     // extension can wedge an item between them.
     const p = opts.priority;
-    this.main = vscode.window.createStatusBarItem("nowPlaying.main", align, p + 3e-4);
+    this.main = vscode.window.createStatusBarItem("playbar.main", align, p + 3e-4);
     this.main.name = "Now Playing";
-    this.main.command = "nowPlaying.raise";
+    this.main.command = "playbar.raise";
 
     if (opts.showControls) {
-      this.prev = vscode.window.createStatusBarItem("nowPlaying.prev", align, p + 2e-4);
+      this.prev = vscode.window.createStatusBarItem("playbar.prev", align, p + 2e-4);
       this.prev.name = "Now Playing: Previous";
       this.prev.text = "$(chevron-left)";
       this.prev.tooltip = "Previous track";
-      this.prev.command = "nowPlaying.prev";
+      this.prev.command = "playbar.prev";
 
-      this.next = vscode.window.createStatusBarItem("nowPlaying.next", align, p);
+      this.next = vscode.window.createStatusBarItem("playbar.next", align, p);
       this.next.name = "Now Playing: Next";
       this.next.text = "$(chevron-right)";
       this.next.tooltip = "Next track";
-      this.next.command = "nowPlaying.next";
+      this.next.command = "playbar.next";
     }
   }
 
