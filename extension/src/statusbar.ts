@@ -6,6 +6,7 @@
 
 import * as vscode from "vscode";
 
+import { ArtCache } from "./artcache";
 import { format } from "./format";
 import { NowPlaying, Status } from "./types";
 
@@ -28,6 +29,8 @@ export class StatusBar implements vscode.Disposable {
   private hideTimer: NodeJS.Timeout | undefined;
   private lastStatus: Status | undefined;
   private autoHidden = false;
+  private lastState: NowPlaying | undefined;
+  private readonly artCache = new ArtCache();
 
   constructor(private readonly opts: StatusBarOptions) {
     const align = opts.alignment === "left"
@@ -76,12 +79,14 @@ export class StatusBar implements vscode.Disposable {
       return;
     }
 
+    this.lastState = state;
     this.main.text = format(state, this.opts.template, this.opts.maxLength, {
       playerIcons: this.opts.playerIcons,
     });
-    const key = tooltipKey(state);
+    const artDataUrl = this.resolveArt(state.art_url);
+    const key = tooltipKey(state, artDataUrl);
     if (key !== this.lastTooltipKey) {
-      this.main.tooltip = buildTooltip(state);
+      this.main.tooltip = buildTooltip(state, artDataUrl);
       this.lastTooltipKey = key;
     }
     this.main.show();
@@ -120,6 +125,20 @@ export class StatusBar implements vscode.Disposable {
     this.next?.dispose();
   }
 
+  private resolveArt(url: string | undefined): string | undefined {
+    if (!url) return undefined;
+    const res = this.artCache.lookup(url);
+    if (res.kind === "ready") return res.dataUrl;
+    if (res.kind === "skip") return undefined;
+    // miss: fetch in background, then re-render so the tooltip picks it up
+    void this.artCache.fetch(url).then(() => {
+      if (this.lastState && this.lastState.art_url === url) {
+        this.render(this.lastState);
+      }
+    });
+    return undefined;
+  }
+
   private clearHideTimer() {
     if (this.hideTimer) {
       clearTimeout(this.hideTimer);
@@ -139,12 +158,12 @@ export class StatusBar implements vscode.Disposable {
   }
 }
 
-function buildTooltip(state: NowPlaying): vscode.MarkdownString {
+function buildTooltip(state: NowPlaying, artDataUrl: string | undefined): vscode.MarkdownString {
   const md = new vscode.MarkdownString();
   md.isTrusted = false;
   md.supportHtml = true;
-  if (state.art_url && /^(file:|data:)/i.test(state.art_url.trim())) {
-    md.appendMarkdown(`<img src="${state.art_url.trim()}" width="180" height="180" />\n\n`);
+  if (artDataUrl) {
+    md.appendMarkdown(`<img src="${artDataUrl}" width="180" height="180" />\n\n`);
   }
   if (state.title) {
     md.appendMarkdown(`**${escape(state.title)}**\n\n`);
@@ -161,7 +180,7 @@ function buildTooltip(state: NowPlaying): vscode.MarkdownString {
   return md;
 }
 
-function tooltipKey(state: NowPlaying): string {
+function tooltipKey(state: NowPlaying, artDataUrl: string | undefined): string {
   return [
     state.title ?? "",
     state.artist ?? "",
@@ -170,6 +189,7 @@ function tooltipKey(state: NowPlaying): string {
     state.duration_ms ?? "",
     state.player ?? "",
     state.status,
+    artDataUrl ? "1" : "0",
   ].join("");
 }
 
