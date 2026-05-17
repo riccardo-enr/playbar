@@ -91,6 +91,26 @@
           },
           "description": "Ordered list of override rules. First match wins; the rule's format replaces nowPlaying.format. Example: [{\"when\":{\"title\":\"Netflix\"},\"format\":\"Netflix\"}]."
         },
+        "nowPlaying.marquee.enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Scroll the status bar text as a marquee when it exceeds nowPlaying.maxLength, instead of truncating with an ellipsis."
+        },
+        "nowPlaying.marquee.speedMs": {
+          "type": "number",
+          "default": 300,
+          "description": "Milliseconds between marquee shifts (lower = faster scroll)."
+        },
+        "nowPlaying.marquee.pauseEndsMs": {
+          "type": "number",
+          "default": 1500,
+          "description": "Milliseconds to pause when the marquee wraps back to the start."
+        },
+        "nowPlaying.marquee.gap": {
+          "type": "string",
+          "default": "   ",
+          "description": "Separator inserted between end and start of the marquee loop."
+        },
         "nowPlaying.playerIcons": {
           "type": "object",
           "default": {},

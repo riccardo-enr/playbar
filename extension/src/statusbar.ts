@@ -20,6 +20,10 @@ export interface StatusBarOptions {
   hideIdleAfterSeconds: number;
   playerIcons: Record<string, string>;
   formatRules: FormatRule[];
+  marqueeEnabled: boolean;
+  marqueeSpeedMs: number;
+  marqueePauseEndsMs: number;
+  marqueeGap: string;
 }
 
 export class StatusBar implements vscode.Disposable {
@@ -28,6 +32,10 @@ export class StatusBar implements vscode.Disposable {
   private readonly next?: vscode.StatusBarItem;
   private lastTooltipKey: string = "";
   private hideTimer: NodeJS.Timeout | undefined;
+  private marqueeTimer: NodeJS.Timeout | undefined;
+  private marqueeAtoms: string[] = [];
+  private marqueeSource: string = "";
+  private marqueeOffset = 0;
   private lastStatus: Status | undefined;
   private autoHidden = false;
   private lastState: NowPlaying | undefined;
@@ -81,10 +89,12 @@ export class StatusBar implements vscode.Disposable {
     }
 
     this.lastState = state;
-    this.main.text = format(state, this.opts.template, this.opts.maxLength, {
+    const effectiveMax = this.opts.marqueeEnabled ? 0 : this.opts.maxLength;
+    const fullText = format(state, this.opts.template, effectiveMax, {
       playerIcons: this.opts.playerIcons,
       rules: this.opts.formatRules,
     });
+    this.applyText(fullText);
     const artDataUrl = this.resolveArt(state.art_url);
     const key = tooltipKey(state, artDataUrl);
     if (key !== this.lastTooltipKey) {
@@ -115,6 +125,7 @@ export class StatusBar implements vscode.Disposable {
 
   hide() {
     this.clearHideTimer();
+    this.stopMarquee();
     this.main.hide();
     this.prev?.hide();
     this.next?.hide();
@@ -122,9 +133,57 @@ export class StatusBar implements vscode.Disposable {
 
   dispose() {
     this.clearHideTimer();
+    this.stopMarquee();
     this.main.dispose();
     this.prev?.dispose();
     this.next?.dispose();
+  }
+
+  private applyText(fullText: string) {
+    const max = this.opts.maxLength;
+    if (!this.opts.marqueeEnabled || max <= 0) {
+      this.stopMarquee();
+      this.main.text = fullText;
+      return;
+    }
+    const atoms = tokenizeAtoms(fullText);
+    if (atoms.length <= max) {
+      this.stopMarquee();
+      this.main.text = fullText;
+      return;
+    }
+    this.startMarquee(fullText, atoms);
+  }
+
+  private startMarquee(source: string, atoms: string[]) {
+    if (this.marqueeSource === source && this.marqueeTimer) {
+      return;
+    }
+    this.stopMarquee();
+    this.marqueeSource = source;
+    this.marqueeAtoms = atoms.concat(tokenizeAtoms(this.opts.marqueeGap));
+    this.marqueeOffset = 0;
+    const win = this.opts.maxLength;
+    this.main.text = renderWindow(this.marqueeAtoms, 0, win);
+    const tick = () => {
+      this.marqueeOffset = (this.marqueeOffset + 1) % this.marqueeAtoms.length;
+      this.main.text = renderWindow(this.marqueeAtoms, this.marqueeOffset, win);
+      const delay = this.marqueeOffset === 0
+        ? this.opts.marqueePauseEndsMs
+        : this.opts.marqueeSpeedMs;
+      this.marqueeTimer = setTimeout(tick, delay);
+    };
+    this.marqueeTimer = setTimeout(tick, this.opts.marqueePauseEndsMs);
+  }
+
+  private stopMarquee() {
+    if (this.marqueeTimer) {
+      clearTimeout(this.marqueeTimer);
+      this.marqueeTimer = undefined;
+    }
+    this.marqueeSource = "";
+    this.marqueeAtoms = [];
+    this.marqueeOffset = 0;
   }
 
   private resolveArt(url: string | undefined): string | undefined {
@@ -205,6 +264,29 @@ function tooltipKey(state: NowPlaying, artDataUrl: string | undefined): string {
 
 function escape(s: string): string {
   return s.replace(/[\\`*_{}[\]()#+\-.!|]/g, (c) => `\\${c}`);
+}
+
+/*
+ * Split a status-bar string into "atoms" where each `$(codicon)` sequence
+ * counts as a single atom. Sliding a window across atoms (instead of
+ * characters) keeps codicons intact when the marquee scrolls.
+ */
+function tokenizeAtoms(s: string): string[] {
+  const re = /\$\([^)]+\)|./gsu;
+  const out: string[] = [];
+  for (const m of s.matchAll(re)) {
+    out.push(m[0]);
+  }
+  return out;
+}
+
+function renderWindow(atoms: string[], offset: number, width: number): string {
+  const n = atoms.length;
+  let out = "";
+  for (let i = 0; i < width; i++) {
+    out += atoms[(offset + i) % n];
+  }
+  return out;
 }
 
 function labelForStatus(s: Status): string {

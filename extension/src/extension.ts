@@ -68,6 +68,10 @@ function boot(ctx: vscode.ExtensionContext) {
     hideIdleAfterSeconds: cfg.get<number>("hideIdleAfterSeconds", 0),
     playerIcons: cfg.get<Record<string, string>>("playerIcons", {}),
     formatRules: cfg.get<FormatRule[]>("formatRules", []),
+    marqueeEnabled: cfg.get<boolean>("marquee.enabled", false),
+    marqueeSpeedMs: cfg.get<number>("marquee.speedMs", 300),
+    marqueePauseEndsMs: cfg.get<number>("marquee.pauseEndsMs", 1500),
+    marqueeGap: cfg.get<string>("marquee.gap", "   "),
   };
   const statusBar = new StatusBar(opts);
   const binary = resolveBinaryPath(ctx.extensionPath, cfg.get<string>("sidecarPath", ""));
