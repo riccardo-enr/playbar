@@ -4,6 +4,13 @@
 
 # PlayBar
 
+[![build](https://github.com/riccardo-enr/playbar/actions/workflows/build.yml/badge.svg)](https://github.com/riccardo-enr/playbar/actions/workflows/build.yml)
+[![docs](https://github.com/riccardo-enr/playbar/actions/workflows/docs.yml/badge.svg)](https://github.com/riccardo-enr/playbar/actions/workflows/docs.yml)
+[![Release](https://img.shields.io/github/v/release/riccardo-enr/playbar?sort=semver)](https://github.com/riccardo-enr/playbar/releases/latest)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Platform: Linux](https://img.shields.io/badge/platform-linux--x86__64-blue)](#install)
+[![VSCode](https://img.shields.io/badge/VSCode-%5E1.84-007ACC?logo=visualstudiocode)](https://code.visualstudio.com/)
+
 VSCode status-bar extension that mirrors `tmux-powerline`'s music segment.
 A small Rust sidecar (`playbar-sidecar/`) talks to MPRIS over D-Bus and emits
 NDJSON; a thin TypeScript extension (`extension/`) renders the result.
